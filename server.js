@@ -34,19 +34,29 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use(cors({
-  origin: "https://frontend-finalfnew.onrender.com",
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || origin === 'https://frontend-finalfnew.onrender.com') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
   maxAge: 3600
-}));
+};
 
-// Configure cookie settings for cross-domain requests
+app.use(cors(corsOptions));
+
+// Add additional headers for cross-domain requests
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Origin', 'https://frontend-finalfnew.onrender.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
   next();
 });
 
