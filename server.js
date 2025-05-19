@@ -36,7 +36,7 @@ app.use(bodyParser.json());
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || origin === 'https://frontend-finalfnew.onrender.com') {
+    if (!origin || origin === 'https://frontend-fnew.vercel.app') {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
