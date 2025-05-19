@@ -35,7 +35,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: "https://frontend-finalfnew.onrender.com/",
+  origin: "https://frontend-finalfnew.onrender.com",
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
