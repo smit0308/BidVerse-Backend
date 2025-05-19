@@ -267,21 +267,24 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const passwordIsCorrrect = await bcrypt.compare(password, user.password);
 
-  const token = generateToken(user._id);
-  res.cookie("token", token, {
-    path: "/",
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 86400), // 1 day
-    sameSite: "none",
-    secure: true,
-  });
+  if (passwordIsCorrrect) {
+    const token = generateToken(user._id);
+    
+    // Set cookie with proper domain
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      domain: process.env.COOKIE_DOMAIN || undefined,
+      expires: new Date(Date.now() + 1000 * 86400) // 1 day
+    });
 
-  if (user && passwordIsCorrrect) {
     const { _id, name, email, photo, role } = user;
-    res.status(201).json({ _id, name, email, photo, role, token });
+    return res.status(201).json({ _id, name, email, photo, role, token });
   } else {
-    res.status(400);
-    throw new Error("Invalid email or password");
+    res.status(401);
+    throw new Error("Invalid credentials");
   }
 });
 
